@@ -1,4 +1,3 @@
-import { string } from 'joi';
 import mongoose from 'mongoose'
 // import quizSchema from '../../validation/quizvalidator.js';
 
@@ -15,11 +14,11 @@ const documentSchema = new mongoose.Schema({
         categories: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     link: {
         type: String,
-        require: true
+        required: true,
     },
         videoUrl: {
             type: String,

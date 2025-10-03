@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
-import Quiz from '../../models/Quiz/quiz';
-import { date } from 'joi';
+import Quiz from '../../models/Quiz/quiz.js';
+
 
 
 const getQuizstas = async (req, res) => {

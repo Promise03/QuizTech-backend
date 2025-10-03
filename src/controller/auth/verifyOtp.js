@@ -1,8 +1,8 @@
 import Otptoken from "../../models/otp/otp.js";
-import User from "../../models/users/user.js";
-import bcrypt from "bcryptjs";
+import User from "../../models/user/user.js";
+import bcrypt from 'bcrypt'
 import httpStatus from "http-status";
-import { generateToken } from "../../utils/generateToken.js";
+import generateToken from "../../utils/generateToken.js";
 import jwt from "jsonwebtoken";
 
 

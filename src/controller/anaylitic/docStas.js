@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import Document from '../../models/document/document';
+import Document from '../../models/document/document.js';
 
 
 const getDocstas = async (req, res) => {

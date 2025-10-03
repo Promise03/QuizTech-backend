@@ -23,22 +23,22 @@ const quizSchema = new mongoose.Schema({
     questions: [{
         questionText: {
             type: String,
-            required: true
+            required: true,
         },
         options: [{
             type: String,
-            required: true
+            required: true,
         }],
         correctAnswer: {
             type: String,
-            required: true
+            required: true,
         },
         explanation: { type: String } 
     }],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
     }
 }, { timestamps: true });
 

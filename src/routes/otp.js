@@ -1,7 +1,7 @@
 import express from "express";
-import { verifyOtp } from "../controller/auth/verifyOtp";
+import { verifyOtp } from "../controller/auth/verifyOtp.js";
 
-const router = express.Route();
+const router = express.Router();
 
 router.post("/vrify-otp", verifyOtp)
 

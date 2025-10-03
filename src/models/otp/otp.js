@@ -1,26 +1,25 @@
-import { attempt, number, string } from "joi";
 import mongoose from "mongoose";
 
 const otpTokenSchema = new mongoose.Schema({
     userid: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User",
-        require: true,
+        required: true,
     },
     otpHash: {
-        tpye: string,
-        require: true,
+        type: String,
+        required: true,
     },
     expireAt: {
         type: Date,
-        require: true,
+        required: true,
     },
     used:{
         type: Boolean,
         default: false,
     },
     attempts: {
-        type: number,
+        type: Number,
         default: 0,
     },
     createdAt: {

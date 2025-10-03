@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import User from '../../models/user/user';
+import User from '../../models/user/user.js';
 
 const getUserStas = async (req, res) => {
     try {
