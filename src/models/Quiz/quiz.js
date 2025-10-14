@@ -1,15 +1,20 @@
 import mongoose from 'mongoose';
 
 const quizSchema = new mongoose.Schema({
-    categories: {
-        type: String,
-        required: true,
-        unique: true
-    },
-      category: { 
+  
+    // This 'topic' field now serves as your primary, coarse-grained filter/category
+     techStack: { 
         type: String, 
-        enum: ["Frontend", "Backend"], 
-        required: true 
+        required: true,
+        // 🚀 Updated enum to serve as the main high-level categories
+        enum: ["Frontend", "Backend", "Cyber Security", "Data Science", "DevOps", "Mobile Development", "Cloud Computing", "AI/Machine Learning", "FullStack", "Data Analysis" ], 
+    },
+    
+    // 'techStack' provides additional detail and allows for multiple tags
+   topic: { 
+        type: [String], // Allows multiple tech stacks (e.g., ['React', 'Node.js', 'AWS'])
+        required: false, // Optional
+        default: []
     },
         difficulty: { 
             type: String, 

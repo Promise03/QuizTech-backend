@@ -3,72 +3,81 @@ import httpStatus from "http-status";
 import { registerSchema } from "../../validation/authvalidator.js";
 import User from "../../models/user/user.js";
 
-//controller function to register users
 const registerUser = async (req, res) => {
+  console.log("Backend Received Body:", req.body);
+
+  // TEMPORARY test trigger
+  if (req.body.name === "TEST_ERROR") {
+    return res.status(httpStatus.BAD_REQUEST).json({
+      success: false,
+      message: "Forced test error to check frontend message display.",
+    });
+  }
+
   try {
-    // validate the request body with the registerSchema
-    const {error} = registerSchema.validate(req.body);
-
-    if (error){
+    // Validate input
+    const { error } = registerSchema.validate(req.body);
+    if (error) {
+      console.error("Validation Error:", error.details[0].message);
       return res.status(httpStatus.BAD_REQUEST).json({
-        status: "Validation Error",
-        message: error.details[0].message
-      })
+        success: false,
+        message: error.details[0].message,
+      });
     }
+
     const { name, username, password, email, role } = req.body;
-    const emailExists =await User.findOne({
-      email,
-    });
 
+    // Check existing email
+    const emailExists = await User.findOne({ email });
     if (emailExists) {
-      res.status(httpStatus.BAD_REQUEST).json({
-        status: "Error",
-        message: "User with email already exists",
+      return res.status(httpStatus.BAD_REQUEST).json({
+        success: false,
+        message: "User with this email already exists.",
       });
     }
 
-    const userName = await User.findOne({
+    // Check existing username
+    const usernameExists = await User.findOne({ username });
+    if (usernameExists) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        success: false,
+        message: "Username already exists.",
+      });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user
+    const createdUser = await User.create({
+      name,
       username,
-    });
-
-    if (userName) {
-      res.status(httpStatus.BAD_REQUEST).json({
-        status: "Error",
-        message: "Username already exists",
-      });
-    }
-
-    //hash your password before saving to database
-    const hashedPassword =await bcrypt.hash(password, 10);
-
-    // exrypt username but store only ciphertext (string)
-    // const encryptedUsername = encrypt(userName)
-
-    //create and save user details to the database
-    const createdUser =await User.create({
-      name: name,
-      username: username,
-      email: email,
+      email,
       password: hashedPassword,
-      role: role,
+      role,
     });
 
-    //send a response(as view after successful registration)
-    res.status(httpStatus.CREATED).json({
-      status: "Success",
-      message: "User registered successful",
-      userDetails: createdUser,
+    console.log("✅ SUCCESS PATH HIT. User ID:", createdUser._id);
+
+    // ✅ Return consistent data format
+    return res.status(httpStatus.CREATED).json({
+      success: true,
+      message: "User registered successfully.",
+      user: {
+        id: createdUser._id,
+        name: createdUser.name,
+        email: createdUser.email,
+        role: createdUser.role,
+      },
     });
-    // logger.info(`User registered: ${userDetails.name}`);
   } catch (error) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      status: "Error",
-      message: "An error occurred while registering user",
+    console.error("Registration error:", error.message);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "An error occurred while registering user.",
       error: error.message,
     });
   }
-  // logger.error(`Error in registerUser: ${error.message}`);
-  // next(error);
 };
 
-export default registerUser ;
+export default registerUser;

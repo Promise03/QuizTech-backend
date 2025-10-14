@@ -1,0 +1,19 @@
+import Quiz from "../../models/Quiz/quiz.js";
+
+export const getQuizById = async (req, res) => {
+    try {
+        // The ID is extracted from the URL: /api/quiz/:id
+        const quiz = await Quiz.findById(req.params.id);
+
+        if (!quiz) {
+            // If quiz is not found, respond with 404
+            return res.status(404).json({ message: 'Quiz not found' });
+        }
+
+        // Success: Send the quiz data
+        res.status(200).json({ quiz }); 
+    } catch (error) {
+        // Handle invalid ID format or other database errors
+        res.status(500).json({ message: 'Error fetching quiz', error: error.message });
+    }
+};

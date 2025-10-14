@@ -8,6 +8,7 @@ import quizRoutes from './routes/quiz.js';
 import documentrouter from './routes/document.js';
 import anayliticRouter from './routes/anaylitics.js';
 import otpRouter from './routes/otp.js';
+import cors from 'cors'
 
 
 
@@ -17,9 +18,11 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors());
+
 // Use routes
 app.use('/api/anaylitics', anayliticRouter );
-app.use('/api/', otpRouter)
+app.use('/api', otpRouter)
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/quiz', quizRoutes);

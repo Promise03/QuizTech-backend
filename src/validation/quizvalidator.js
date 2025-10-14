@@ -8,8 +8,8 @@ const questionSchema = Joi.object({
 });
 
 const quizSchema = Joi.object({
-    categories: Joi.string().required(),
-    category: Joi.string().required(),
+    topic: Joi.string().required(),
+    techStack: Joi.string().required(),
     difficulty: Joi.string().required(),
     questions: Joi.array().items(questionSchema).required(),
     createdBy: Joi.string().required(), // Assuming createdBy is a string ID from the request
