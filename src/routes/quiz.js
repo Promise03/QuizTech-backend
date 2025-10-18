@@ -4,7 +4,7 @@ import { getAllQuizzes } from "../controller/quiz/getAllQuiz.js";
 import { getQuizbyTopic } from "../controller/quiz/getQuizbyTopic.js";
 import { checkRole } from "../middleware/auth.js";
 import { getQuizbyTechname } from "../controller/quiz/getQuizbyTechname.js";
-import { getQuizById } from "../controller/quiz/getQuizbyid";
+import { getQuizById } from "../controller/quiz/getQuizbyid.js";
 import { deleteQuiz } from "../controller/quiz/deleteQuiz.js";
 
 const router = express.Router()

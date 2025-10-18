@@ -1,47 +1,42 @@
-import httpStatus from 'http-status';
-import User from '../../models/user/user.js';
+import httpStatus from "http-status";
+import User from "../../models/user/user.js";
 
 const getUserStas = async (req, res) => {
-    try {
-        const TotalUser = await User.countDocuments({})
-        const stas = await User.aggregate([
-            // add a field for the date without time
-            {
-                $addFields: {
-                    userdate: { date: "${createdAt}", unit: "day"}
-                }
+  try {
+    const TotalUsers = await User.countDocuments();
 
-            },
-            // group the new date field and count user by date
-            {
-                $group: {
-                    _id: "${userdate",
-                    userAdded: {$sun: 1} 
-                }
-            },
+    const stas = await User.aggregate([
+      {
+        $addFields: {
+          userdate: { $dateTrunc: { date: "$createdAt", unit: "day" } }
+        },
+      },
+      {
+        $group: {
+          _id: "$userdate",
+          userAdded: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
 
-            // sort the result by date
-            {
-                $sort: {
-                    _id: 1
-                }
-            },
+    res.status(httpStatus.OK).json({
+      status: "successful",
+      message: "User stats retrieved successfully",
+      data: {
+        totalUsers: TotalUsers,
+        userAddedPerDay: stas,
+      },
+    });
+  } catch (error) {
+    console.error("Error in getUserStas:", error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
 
-            res.status(httpStatus.OK).json({
-                status: "successful",
-                message: "user stas retrieve successfully",
-                data:{
-                    TotalUsers: TotalUser,
-                    userAddedperday: stas,
-                }
-            })
-        ])
-    } catch (error) {
-        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-            status: "Error",
-            message: error.message
-        })
-    }
-}
-
-export default getUserStas
+export default getUserStas;

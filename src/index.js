@@ -6,7 +6,7 @@ import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import quizRoutes from './routes/quiz.js';
 import documentrouter from './routes/document.js';
-import anayliticRouter from './routes/anaylitics.js';
+import anayliticRoutes from './routes/anaylitics.js';
 import otpRouter from './routes/otp.js';
 import cors from 'cors'
 
@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(cors());
 
 // Use routes
-app.use('/api/anaylitics', anayliticRouter );
+app.use("/api/analytics", anayliticRoutes);
 app.use('/api', otpRouter)
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);

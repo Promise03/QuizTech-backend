@@ -16,4 +16,5 @@ export const getQuizById = async (req, res) => {
         // Handle invalid ID format or other database errors
         res.status(500).json({ message: 'Error fetching quiz', error: error.message });
     }
+    
 };

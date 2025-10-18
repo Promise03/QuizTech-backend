@@ -23,9 +23,8 @@ const getUserCountByRole = async (req, res) => {
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
             status: "Error",
-            message: e.massage
+            message: e.message
         })
     }
 }
-
-export default getUserCountByRole
+export default getUserCountByRole;
