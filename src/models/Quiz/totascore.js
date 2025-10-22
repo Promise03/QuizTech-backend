@@ -8,4 +8,6 @@ const quizAttemptSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model("QuizAttempt", quizAttemptSchema);
+const  QuizAttempt= mongoose.model("QuizAttempt", quizAttemptSchema);
+
+export default QuizAttempt
