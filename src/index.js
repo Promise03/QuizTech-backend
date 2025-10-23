@@ -20,6 +20,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("Backend is alive!");
+});
+
 // Use routes
 app.use("/api/analytics", anayliticRoutes);
 app.use('/api', otpRouter)
