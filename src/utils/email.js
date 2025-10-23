@@ -5,8 +5,8 @@ import nodemailer from 'nodemailer';
 export const createTransport = () => {
     return nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
+        port: 587,
+        secure: false,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_SECRETCODE,
@@ -51,6 +51,6 @@ export const sendOtpEmail = async (toEmail, otp) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log("OTP email sent:", info);
+    console.log("OTP email sent:", info)
     return info;
 }
