@@ -7,7 +7,7 @@ import userRoutes from './routes/user.js';
 import quizRoutes from './routes/quiz.js';
 import documentrouter from './routes/document.js';
 import anayliticRoutes from './routes/anaylitics.js';
-import otpRouter from './routes/otp.js';
+// import otpRouter from './routes/otp.js';
 import cors from 'cors'
 
 
@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 
 // Use routes
 app.use("/api/analytics", anayliticRoutes);
-app.use('/api', otpRouter)
+// app.use('/api', otpRouter)
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/quiz', quizRoutes);
