@@ -69,20 +69,34 @@
 //     }
 // };
 
-import { Resend } from "resend";
+import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+console.log('SMTP Config:', {
+    user: process.env.EMAIL_USER,
+    sendgridApiKey: process.env.SENDGRID_API_KEY ? '****' : undefined,
+});
+
+export const createTransport = () => {
+    return nodemailer.createTransport({
+        service: 'SendGrid',
+        auth: {
+            user: 'apikey',  // Always 'apikey' for SendGrid
+            pass: process.env.SENDGRID_API_KEY,
+        },
+    });
+};
 
 export const sendOtpEmail = async (toEmail, otp) => {
     try {
-        const { data, error } = await resend.emails.send({
-            from: `QuizTech <${process.env.EMAIL_USER}>`,
+        const transporter = createTransport();
+        const mailOptions = {
+            from: `QuizTech <${process.env.EMAIL_USER}>`,  // Use verified sender/domain
             to: toEmail,
             subject: "🔑 Your QuizTech OTP code",
-            text: `Your login OTP is ${otp}. It expires in 15minutes.`,
+            text: `Your login OTP is ${otp}. It expires in 15 minutes.`,
             html: `
                 <div style="font-family: Arial, sans-serif; background-color: #f9fafb; padding: 20px; color: #333;">
                     <div style="max-width: 500px; margin: 0 auto; background: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
@@ -107,14 +121,11 @@ export const sendOtpEmail = async (toEmail, otp) => {
                     </div>
                 </div>
             `,
-        });
+        };
 
-        if (error) {
-            console.error("Resend error:", error);
-            throw new Error(`Failed to send OTP email: ${error.message}`);
-        }
-        console.log("OTP email sent:", data.id);
-        return data;
+        const info = await transporter.sendMail(mailOptions);
+        console.log("OTP email sent:", info.messageId);
+        return info;
     } catch (error) {
         console.error("Failed to send OTP email:", error);
         throw new Error(`Failed to send OTP email: ${error.message}`);
