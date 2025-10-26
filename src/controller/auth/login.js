@@ -2,13 +2,10 @@ import User from "../../models/user/user.js";
 import { loginSchema } from "../../validation/authvalidator.js";
 import bcrypt from "bcrypt";
 import httpStatus from "http-status";
-// import { jwtTemToken } from "../../utils/generateToken.js";
-import { createAndSaveOtp } from "../../utils/otp.js";
-import { sendOtpEmail } from "../../utils/email.js";
 import jwt from "jsonwebtoken";
 
- const login = async (req, res) => {
-    // ✅ ADD THIS LINE
+const login = async (req, res) => {
+  // ✅ ADD THIS LINE
   console.log('Backend Received Body:', req.body);
   try {
     // ✅ Validate request body
@@ -41,30 +38,12 @@ import jwt from "jsonwebtoken";
       });
     }
 
-    // ✅ Credentials valid → Create OTP + Save
-    const { otp } = await createAndSaveOtp(
-      userExist._id,
-      Number(process.env.OTP_EXPIRY_MINUTES || 10)
-    );
-
-    // ✅ Send OTP email
-    try {
-      await sendOtpEmail(userExist.email, otp);
-      
-    } catch (mailErr) {
-        console.error("Email error:", mailErr);   // 👈 add this
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-        status: "error",
-        message: "Failed to send OTP email",
-      });
-    }
-
-    // ✅ Create short-lived temp token (for OTP session)
-    const tempToken = jwt.sign(
-      {sub: userExist._id.toString(), type: "otp"},
+    // ✅ Create real JWT token
+    const token = jwt.sign(
+      { sub: userExist._id.toString(), role: userExist.role },
       process.env.JWT_SECRET,
-      {expiresIn: "15m"} 
-    )
+      { expiresIn: process.env.JWT_EXPIRY }
+    );
 
     // ✅ Build safe user object (don’t leak hashed password!)
     const safeUser = {
@@ -75,11 +54,11 @@ import jwt from "jsonwebtoken";
     };
 
     // ✅ Send response
-      return res.status(httpStatus.OK).json({
+    return res.status(httpStatus.OK).json({
       status: "success",
-      message: "OTP sent to your email. Please verify to complete login.",
+      message: "Login successful",
       user: safeUser,
-      tempToken, // frontend will use this for OTP verification
+      token,
     });
   } catch (error) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
