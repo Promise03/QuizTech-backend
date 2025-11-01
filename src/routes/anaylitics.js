@@ -2,12 +2,12 @@ import express from "express";
 import getUserStas from "../controller/anaylitic/userStas.js";
 import getDocstas from "../controller/anaylitic/docStas.js";
 import getQuizstas from "../controller/anaylitic/quizStas.js";
-import getUserCountByRole from "../controller/anaylitic/anayliticsController.js"
+import getUserCountByRole from "../controller/anaylitic/anayliticsController.js";
 import { getUserDashboardStats } from "../controller/anaylitic/TotalScore.js";
 
 
 
-const router = express.Router();
+const router = express.Router()
 
 router.get("/alluserbyrole", getUserCountByRole)
 router.get("/alluser", getUserStas)
