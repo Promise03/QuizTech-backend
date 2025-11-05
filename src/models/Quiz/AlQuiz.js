@@ -6,7 +6,7 @@ const aiUserId = new mongoose.Types.ObjectId("000000000000000000000000"); // pla
 const quiz = new Quiz({
   techStack: document.techStack || "AI/Machine Learning", // or derive from doc
   difficulty: "Intermediate",
-  topic: ["AI Generated"],
+  topic: ["TechStack"],
   questions: quizData.map(q => ({
     questionText: q.question,
     options: q.options,

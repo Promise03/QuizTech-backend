@@ -61,7 +61,7 @@ export async function generateQuizFromText(text) {
           },
           {
             role: "user",
-            content: `Create 5 multiple-choice quiz questions from this text:
+            content: `Create 20 multiple-choice quiz questions from this text:
             "${text}"
             Return ONLY a valid JSON array, no extra text, like this:
             [
@@ -71,7 +71,7 @@ export async function generateQuizFromText(text) {
                 "answer": "A",
                 "explanation": "..."
               }
-            ]`,
+            ]`, 
           },
         ],
       }),

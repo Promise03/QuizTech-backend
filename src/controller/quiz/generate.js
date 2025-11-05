@@ -63,17 +63,28 @@ export const generateQuizFromDoc = async (req, res) => {
 
     // 💾 Save quiz
     const quiz = new Quiz({
-      techStack,
-      difficulty: "Intermediate",
-      topic: ["AI Generated"],
-      questions: quizData.map((q) => ({
-        questionText: q.question,
-        options: q.options,
-        correctAnswer: q.answer,
-        explanation: q.explanation || "",
-      })),
-      createdBy: aiUserId,
-    });
+  techStack,
+  difficulty: "Intermediate",
+  topic: ["AI Generated"],
+  questions: quizData.map((q) => {
+    // Convert letter (A/B/C/D) to actual answer text
+    let correctAnswerText = q.answer;
+
+    if (["A", "B", "C", "D"].includes(q.answer)) {
+      const index = { A: 0, B: 1, C: 2, D: 3 }[q.answer];
+      correctAnswerText = q.options[index];
+    }
+
+    return {
+      questionText: q.question,
+      options: q.options,
+      correctAnswer: correctAnswerText,
+      explanation: q.explanation || "",
+    };
+  }),
+  createdBy: aiUserId,
+});
+
 
     await quiz.save();
 
